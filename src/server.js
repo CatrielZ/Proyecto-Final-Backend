@@ -1,9 +1,10 @@
-//import __dirname from './dirname';
+//const __dirname = require("./dirname.js")
 const mongoose = require('mongoose');
 const express = require('express')
+
 const path = require("path")
 const rutas = require ('./routes/index')
-const register = require ('./routes/register')
+
 
 const url  ="mongodb://localhost/GymBro"
 const app = express()
@@ -37,6 +38,7 @@ app.set("views", path.join(__dirname, './views'));
 app.set('view engine','.ejs')
 
 app.use('/', rutas)
+app.use('/register', rutas)
 
 
   app.post('/', (req, res) => {
