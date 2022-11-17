@@ -1,0 +1,73 @@
+const productsService = require ("../service/productsService");
+const WSresponse = require ("../libs/WSresponse");
+
+const getAll = async (req, res)=>{
+    try {
+        const sort = (req.query.sort) ? {precio: Number(req.query.sort)} : {};
+        const data = await productsService.getAll(sort);
+        res.status(200).json(new WSresponse(data, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
+};
+
+const getById = async (req, res)=>{
+    try {
+        const idProd = req.params.id;
+        const data = await productsService.getById(idProd);
+        res.status(200).json(new WSresponse(data, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
+};
+
+const getByCategory = async (req, res)=>{
+    try {
+        const category = req.params.category;
+        const sort = (req.query.sort) ? {precio: Number(req.query.sort)} : {};
+        const data = await productsService.getByCategory(category, sort);
+        res.status(200).json(new WSresponse(data, "success"));
+    } catch (error) {
+        return res.status(error.status || 500).json(new WSresponse(null, error.message, true));
+    }
+};
+
+const add = async (req, res)=>{
+    try {
+        const product = req.body;
+        const data = await productsService.add(product);
+        res.status(201).json(new WSresponse(data, "success"));        
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
+};
+
+const updateById = async (req, res)=>{
+    try {
+        const idProd = req.params.id;
+        const newDataObj = req.body;
+        await productsService.updateById(idProd, newDataObj);
+        res.status(201).json(new WSresponse(null, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
+};
+
+const deleteById = async (req, res)=>{
+    try {
+        const idProd = req.params.id;
+        await productsService.deleteById(idProd);
+        res.status(201).json(new WSresponse(null, "success"));
+    } catch (error) {
+        return res.status(error.status).json(new WSresponse(null, error.message, true));
+    }
+};
+
+module.exports = {
+    getAll,
+    getByCategory,
+    getById,
+    add,
+    updateById,
+    deleteById
+}
